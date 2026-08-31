@@ -1,0 +1,40 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local databases / vector stores
+*.sqlite
+*.sqlite3
+*.db
+chroma_db/
+chroma_data/
+
+# Logs
+logs/
+*.log
+
+# Generated evaluation outputs
+evaluation/results/
+evaluation/output/
+
+# OS files
+.DS_Store
+Thumbs.db
