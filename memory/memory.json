@@ -1,0 +1,136 @@
+{
+  "thread_001": [
+    {
+      "role": "user",
+      "content": "My order is ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "What is the status?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "What is the return policy for footwear?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nmay arrange a replacement, return, or refund when the claim meets the applicable conditions."
+    }
+  ],
+  "thread_002": [
+    {
+      "role": "user",
+      "content": "What order did I mention earlier?"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't have an order ID from this conversation. Please share your order ID (e.g. ORD1001)."
+    }
+  ],
+  "thread_test_01": [
+    {
+      "role": "user",
+      "content": "My phone is [REDACTED_PHONE] and I want status on ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    }
+  ],
+  "thread_fc9679": [
+    {
+      "role": "user",
+      "content": "status of my order"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't have an order ID from this conversation. Please share your order ID (e.g. ORD1001)."
+    },
+    {
+      "role": "user",
+      "content": "ORD100"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD100 not found"
+    },
+    {
+      "role": "user",
+      "content": "ORD100"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD100 not found"
+    },
+    {
+      "role": "user",
+      "content": "ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "now order num: ORD1006"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1006 is currently Shipped. Order value: ₹5393. Escalation score: 0.08 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "My phone is [REDACTED_PHONE]. How do returns work?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nDocument ID: KB002\nTopic: COD Refund Timelines\n\nFor Cash on Delivery orders, approved refunds are processed after the returned item passes the required inspection. The refund is normally initiated wit\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t"
+    }
+  ],
+  "user_session_101": [
+    {
+      "role": "user",
+      "content": "What is status of ORD1001?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    }
+  ],
+  "user_session_202": [
+    {
+      "role": "user",
+      "content": "My order is ORD1002, tell me status"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1002 is currently Delivered. Order value: ₹18169. Escalation score: 0.027 (escalation recommended: False)."
+    }
+  ],
+  "escalation_thread_999": [
+    {
+      "role": "user",
+      "content": "Check status for ORD1005 (Delayed high value order)"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1005 is currently Shipped. Order value: ₹511. Escalation score: 0.32 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "What is the status of ORD1001?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    }
+  ]
+}
