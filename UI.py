@@ -12,8 +12,8 @@ st.set_page_config(page_title="Nykaa Support Agent", page_icon="🛍️", layout
 st.title("🛍️ Nykaa Support AI Agent")
 
 # Backend API Configuration
+# Replace 'your-render-app-name' with your actual Render URL
 BACKEND_URL = os.getenv("BACKEND_URL", "https://nykaa-support-agent.onrender.com/")
-
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
