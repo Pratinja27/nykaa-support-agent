@@ -1,9 +1,9 @@
 fastapi
 uvicorn
-streamlit
-requests
 pydantic
 langgraph
+langgraph-checkpoint
+langgraph-checkpoint-sqlite
 langchain
 langchain-community
 chromadb
