@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+streamlit
+requests
+pydantic
+langgraph
+langchain
+langchain-community
+chromadb
+fastmcp

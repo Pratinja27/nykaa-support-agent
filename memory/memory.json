@@ -132,5 +132,25 @@
       "role": "assistant",
       "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
     }
+  ],
+  "thread_634c69": [
+    {
+      "role": "user",
+      "content": "what is return policy?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\ner warranty under this policy. Warranty claims require proof of purchase and are subject to the applicable manufacturer's terms."
+    }
+  ],
+  "thread_c62586": [
+    {
+      "role": "user",
+      "content": "what is return policy?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\ner warranty under this policy. Warranty claims require proof of purchase and are subject to the applicable manufacturer's terms."
+    }
   ]
 }

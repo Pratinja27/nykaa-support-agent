@@ -1,6 +1,7 @@
 import os
 from typing import Optional
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agent.checkpoint import get_sqlite_checkpointer
@@ -14,10 +15,18 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Enable CORS for Frontend Communication
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Initialize Checkpointer and LangGraph Application
 checkpointer = get_sqlite_checkpointer()
 agent_app = build_graph(checkpointer=checkpointer)
-
 
 # ---------------------------------------------------------------------------
 # REQUEST / RESPONSE MODELS

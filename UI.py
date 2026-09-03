@@ -3,25 +3,21 @@ import os
 import json
 import uuid
 import time
+import requests
 
-from agent.graph import build_graph
 from agent.guardrails import mask_pii, detect_injection
-from agent.schema import AgentResponseSchema
 
 st.set_page_config(page_title="Nykaa Support Agent", page_icon="🛍️", layout="wide")
 
 st.title("🛍️ Nykaa Support AI Agent")
 
+# Backend API Configuration
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8001")
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
     st.session_state.thread_id = f"thread_{uuid.uuid4().hex[:6]}"
-
-@st.cache_resource
-def get_agent_graph():
-    return build_graph()
-
-graph_app = get_agent_graph()
 
 LOG_DIR = "logs"
 LOG_FILE = os.path.join(LOG_DIR, "requests.jsonl")
@@ -36,7 +32,7 @@ with st.sidebar:
     st.text_input("Thread ID", value=st.session_state.thread_id, disabled=True)
 
     st.markdown("---")
-    st.header("📄 Add KB Document (Task 11)")
+    st.header("📄 Add KB Document")
     doc_filename = st.text_input("Filename", value="policies/returns.txt")
     doc_content = st.text_area("Content", value="Nykaa return policy allows returns within 15 days.")
 
@@ -48,7 +44,7 @@ with st.sidebar:
         st.success(f"Added `{doc_filename}` successfully!")
 
     st.markdown("---")
-    st.header("📜 Live Log Stream (Task 12)")
+    st.header("📜 Live Log Stream")
     if os.path.exists(LOG_FILE):
         with open(LOG_FILE, "r", encoding="utf-8") as f:
             logs = f.readlines()
@@ -74,31 +70,37 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
             st.error(err_msg)
     else:
         masked_query = mask_pii(prompt)
-        graph_input = {"thread_id": st.session_state.thread_id, "query": masked_query}
-        result = graph_app.invoke(graph_input)
-        duration = round(time.time() - start_time, 4)
-
-        validated_response = AgentResponseSchema(
-            thread_id=st.session_state.thread_id,
-            query=masked_query,
-            route=result.get("route", "rag"),
-            final_response=result.get("final_response", "No response generated."),
-            source=result.get("source", "system"),
-            metadata={"trace_id": trace_id}
-        )
-
-        log_entry = {
-            "trace_id": trace_id,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "duration_sec": duration,
+        payload = {
             "thread_id": st.session_state.thread_id,
-            "query_masked": masked_query,
-            "route": validated_response.route,
-            "final_response": validated_response.final_response
+            "query": masked_query
         }
-        log_request(log_entry)
 
-        reply_content = f"{validated_response.final_response}\n\n*`[Route: {validated_response.route} | Source: {validated_response.source}]`*"
-        st.session_state.messages.append({"role": "assistant", "content": reply_content})
-        with st.chat_message("assistant"):
-            st.markdown(reply_content)
+        try:
+            response = requests.post(f"{BACKEND_URL}/chat", json=payload, timeout=30)
+            duration = round(time.time() - start_time, 4)
+
+            if response.status_code == 200:
+                data = response.json()
+                route = data.get("route", "unknown")
+                final_res = data.get("final_response", "No response generated.")
+
+                log_entry = {
+                    "trace_id": trace_id,
+                    "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                    "duration_sec": duration,
+                    "thread_id": st.session_state.thread_id,
+                    "query_masked": masked_query,
+                    "route": route,
+                    "final_response": final_res
+                }
+                log_request(log_entry)
+
+                reply_content = f"{final_res}\n\n*`[Route: {route}]`*"
+                st.session_state.messages.append({"role": "assistant", "content": reply_content})
+                with st.chat_message("assistant"):
+                    st.markdown(reply_content)
+            else:
+                st.error(f"Backend API Error ({response.status_code}): {response.text}")
+
+        except Exception as e:
+            st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Ensure server is running. Error: {str(e)}")
