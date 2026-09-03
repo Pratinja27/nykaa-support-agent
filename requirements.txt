@@ -8,3 +8,6 @@ langchain
 langchain-community
 chromadb
 fastmcp
+sentence-transformers
+torch
+transformers
