@@ -100,7 +100,7 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
                 with st.chat_message("assistant"):
                     st.markdown(reply_content)
             else:
-                st.error(f"Backend API Error ({response.status_code}): {response.text}")
+                st.error(f"Backend API Error ({response.status_code}) at target `{BACKEND_URL}/chat`: {response.text}")
 
         except Exception as e:
             st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Ensure server is running. Error: {str(e)}")
