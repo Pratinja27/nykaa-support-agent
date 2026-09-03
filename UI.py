@@ -12,7 +12,7 @@ st.set_page_config(page_title="Nykaa Support Agent", page_icon="🛍️", layout
 st.title("🛍️ Nykaa Support AI Agent")
 
 # Backend API Configuration
-BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8001")
+BACKEND_URL = os.getenv("BACKEND_URL", "https://nykaa-support-agent.onrender.com/")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
