@@ -152,5 +152,55 @@
       "role": "assistant",
       "content": "Based on the knowledge base:\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\ner warranty under this policy. Warranty claims require proof of purchase and are subject to the applicable manufacturer's terms."
     }
+  ],
+  "thread_6fb10b": [
+    {
+      "role": "user",
+      "content": "status of order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "return policy"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nmay arrange a replacement, return, or refund when the claim meets the applicable conditions.\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t"
+    },
+    {
+      "role": "user",
+      "content": "i have electronic order can u tell what is warranty"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\ner warranty under this policy. Warranty claims require proof of purchase and are subject to the applicable manufacturer's terms.\n\nDocument ID: KB005\nTopic: Warranty Terms by Category\n\nElectronics products may include a manufacturer warranty of up to 12 months depending on the product. Selected Home appliances may carry a warrant\n\nDocument ID: KB010\nTopic: Damaged Item Claim Process\n\nCustomers should report a damaged item as soon as possible after delivery through customer support. The claim should include the order ID and clea"
+    },
+    {
+      "role": "user",
+      "content": "can i return my clothes"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nronics items. Home products have a 10-day return window, while Beauty products have a 5-day return window. Items must be unused, in resalable condition, and accompanied by the original packaging where"
+    },
+    {
+      "role": "user",
+      "content": "how much time does take to return it"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nd inspection. The refund is normally initiated within 5 business days after approval and may take another 3–7 business days to appear in the customer's bank account. Customers must provide valid bank\n\nviceable locations may require up to 10 business days. The delivery estimate can change because of weather, carrier disruptions, public holidays, or other operational delays."
+    },
+    {
+      "role": "user",
+      "content": "ok thank you"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    }
   ]
 }
