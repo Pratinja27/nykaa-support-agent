@@ -1,40 +1,4 @@
 {
-  "thread_001": [
-    {
-      "role": "user",
-      "content": "My order is ORD1001"
-    },
-    {
-      "role": "assistant",
-      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
-    },
-    {
-      "role": "user",
-      "content": "What is the status?"
-    },
-    {
-      "role": "assistant",
-      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
-    },
-    {
-      "role": "user",
-      "content": "What is the return policy for footwear?"
-    },
-    {
-      "role": "assistant",
-      "content": "Based on the knowledge base:\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nmay arrange a replacement, return, or refund when the claim meets the applicable conditions."
-    }
-  ],
-  "thread_002": [
-    {
-      "role": "user",
-      "content": "What order did I mention earlier?"
-    },
-    {
-      "role": "assistant",
-      "content": "I don't have an order ID from this conversation. Please share your order ID (e.g. ORD1001)."
-    }
-  ],
   "thread_test_01": [
     {
       "role": "user",
@@ -201,6 +165,60 @@
     {
       "role": "assistant",
       "content": "I don't know based on the available knowledge base."
+    }
+  ],
+  "thread_001": [
+    {
+      "role": "user",
+      "content": "My order is ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "What is the status?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "What is the return policy for footwear?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nmay arrange a replacement, return, or refund when the claim meets the applicable conditions."
+    }
+  ],
+  "thread_002": [
+    {
+      "role": "user",
+      "content": "What order did I mention earlier?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nn, and accompanied by the original packaging where applicable.\n\nrt. The claim should include the order ID and clear photographs showing the damage and the item's packaging. The support team reviews the evidence and may arrange a replacement, return, or refund when\n\nions while the order remains active. Customers should avoid submitting repeated payments if a previous transaction is still showing as pending. If money was debited but the order was not confirmed, th"
+    }
+  ],
+  "thread_ff8d8c": [
+    {
+      "role": "user",
+      "content": "status of order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "return policy"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nmay arrange a replacement, return, or refund when the claim meets the applicable conditions.\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t"
     }
   ]
 }

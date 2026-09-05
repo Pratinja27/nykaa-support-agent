@@ -13,7 +13,7 @@ st.title("🛍️ Nykaa Support AI Agent")
 
 # Backend API Configuration
 # Updated to match your exact Render service URL
-raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8001")
+raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 BACKEND_URL = raw_url.strip().rstrip("/")
 if "messages" not in st.session_state:
     st.session_state.messages = []
