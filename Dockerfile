@@ -9,8 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy all project code
 COPY . .
 
-# Pre-build ChromaDB vector collection during the Docker build phase
-RUN python dataset.py
+# Generate dataset and build ChromaDB vector store
+RUN python dataset.py && python -m rag.index
 
 # Expose Streamlit port
 EXPOSE 8501
@@ -18,5 +18,5 @@ EXPOSE 8501
 # Grant execution permission to the script
 RUN chmod +x start.sh
 
-# Run the startup script
+# Run startup script
 CMD ["./start.sh"]
