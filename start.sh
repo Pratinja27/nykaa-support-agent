@@ -1,15 +1,17 @@
 #!/bin/bash
 
-# Populate vector database
+# Run dataset script and wait for completion
+echo "=== Building ChromaDB collection ==="
 python dataset.py
+echo "=== ChromaDB script finished ==="
 
 # Start FastAPI backend in background
 uvicorn api.app:app --host 0.0.0.0 --port 8000 &
 
-# Wait 5 seconds to give FastAPI time to spin up completely
+# Wait for FastAPI to initialize
 sleep 5
 
-# Use Render's PORT variable if available, default to 8501
+# Use Render's PORT variable
 PORT="${PORT:-8501}"
 
 # Start Streamlit frontend
