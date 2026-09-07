@@ -26,7 +26,7 @@ with col2:
     st.title("Nykaa Support AI Agent")
 
 # Backend API Configuration
-raw_url = os.getenv("BACKEND_URL", "https://nykaa-support-agent-1.onrender.com")
+raw_url = os.getenv("BACKEND_URL", "https://nykaa-support-agent-1.onrender.com/")
 BACKEND_URL = raw_url.strip().rstrip("/")
 
 if "messages" not in st.session_state:
