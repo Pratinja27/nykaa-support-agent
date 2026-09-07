@@ -119,7 +119,7 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
 
         try:
             # allow_redirects=True ensures POST payload survives proxy redirects
-            endpoint_url = f"{BACKEND_URL}/chat"
+            endpoint_url = f"{BACKEND_URL}/chat/"
             response = requests.post(endpoint_url, json=payload, timeout=30, allow_redirects=True)
             duration = round(time.time() - start_time, 4)
 
