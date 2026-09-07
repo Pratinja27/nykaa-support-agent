@@ -9,12 +9,20 @@ from agent.guardrails import mask_pii, detect_injection
 
 st.set_page_config(page_title="Nykaa Support Agent", page_icon="🛍️", layout="wide")
 
-st.title("🛍️ Nykaa Support AI Agent")
+# ---------------------------------------------------------------------------
+# LOGO DISPLAY LOGIC
+# ---------------------------------------------------------------------------
+# If logo.png exists in your root folder, display it; otherwise, use emoji title
+if os.path.exists("logo.png"):
+    st.image("logo.png", width=180)
+    st.title("Nykaa Support AI Agent")
+else:
+    st.title("🛍️ Nykaa Support AI Agent")
 
 # Backend API Configuration
-# Updated to match your exact Render service URL
 raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 BACKEND_URL = raw_url.strip().rstrip("/")
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
@@ -27,6 +35,15 @@ os.makedirs(LOG_DIR, exist_ok=True)
 def log_request(log_data: dict):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(log_data) + "\n")
+
+# ---------------------------------------------------------------------------
+# SMALL-TALK MATCHERS
+# ---------------------------------------------------------------------------
+GREETINGS = ["hi", "hello", "hey", "good morning", "good evening", "hi there"]
+THANK_YOU_PHRASES = [
+    "thank you", "thanks", "thank u", "thanks a lot", 
+    "thats alright", "that's alright", "okay thank you", "ok thanks"
+]
 
 with st.sidebar:
     st.header("⚙️ Session Info")
@@ -61,15 +78,33 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    start_time = time.time()
-    trace_id = str(uuid.uuid4())
+    clean_prompt = prompt.strip().lower()
 
-    if detect_injection(prompt):
+    # 1. Immediate response for Thank You / Acknowledgments
+    if any(phrase == clean_prompt or clean_prompt.startswith(phrase) for phrase in THANK_YOU_PHRASES):
+        reply = "You're very welcome! 😊 Let me know if you need help with anything else on Nykaa!"
+        st.session_state.messages.append({"role": "assistant", "content": reply})
+        with st.chat_message("assistant"):
+            st.markdown(reply)
+
+    # 2. Immediate response for Greetings
+    elif clean_prompt in GREETINGS:
+        reply = "Hello! 👋 Welcome to Nykaa Support. How can I assist you with your orders or products today?"
+        st.session_state.messages.append({"role": "assistant", "content": reply})
+        with st.chat_message("assistant"):
+            st.markdown(reply)
+
+    # 3. Security Guardrail Check
+    elif detect_injection(prompt):
         err_msg = "🚨 **Security Policy Violation**: Prompt injection attempt detected."
         st.session_state.messages.append({"role": "assistant", "content": err_msg})
         with st.chat_message("assistant"):
             st.error(err_msg)
+
+    # 4. Standard Queries sent to Backend API
     else:
+        start_time = time.time()
+        trace_id = str(uuid.uuid4())
         masked_query = mask_pii(prompt)
         payload = {
             "thread_id": st.session_state.thread_id,
