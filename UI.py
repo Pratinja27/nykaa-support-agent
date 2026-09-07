@@ -117,34 +117,36 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
             "query": masked_query
         }
 
-        try:
-            # allow_redirects=True ensures POST payload survives proxy redirects
-            endpoint_url = f"{BACKEND_URL}/chat/"
-            response = requests.post(endpoint_url, json=payload, timeout=30, allow_redirects=True)
-            duration = round(time.time() - start_time, 4)
+        # In UI.py around line 120:
+try:
+    endpoint_url = f"{BACKEND_URL}/chat"
+    response = requests.post(endpoint_url, json=payload, timeout=30)
+    duration = round(time.time() - start_time, 4)
 
-            if response.status_code == 200:
-                data = response.json()
-                route = data.get("route", "unknown")
-                final_res = data.get("final_response", "No response generated.")
+    if response.status_code == 200:
+        data = response.json()
+        route = data.get("route", "unknown")
+        final_res = data.get("final_response", "No response generated.")
 
-                log_entry = {
-                    "trace_id": trace_id,
-                    "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                    "duration_sec": duration,
-                    "thread_id": st.session_state.thread_id,
-                    "query_masked": masked_query,
-                    "route": route,
-                    "final_response": final_res
-                }
-                log_request(log_entry)
+        log_entry = {
+            "trace_id": trace_id,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "duration_sec": duration,
+            "thread_id": st.session_state.thread_id,
+            "query_masked": masked_query,
+            "route": route,
+            "final_response": final_res
+        }
+        log_request(log_entry)
 
-                reply_content = f"{final_res}\n\n*`[Route: {route}]`*"
-                st.session_state.messages.append({"role": "assistant", "content": reply_content})
-                with st.chat_message("assistant"):
-                    st.markdown(reply_content)
-            else:
-                st.error(f"Backend API Error ({response.status_code}) at target `{endpoint_url}`: {response.text}")
+        reply_content = f"{final_res}\n\n*`[Route: {route}]`*"
+        st.session_state.messages.append({"role": "assistant", "content": reply_content})
+        with st.chat_message("assistant"):
+            st.markdown(reply_content)
+    else:
+        st.error(f"Backend API Error ({response.status_code}): {response.text}")
 
-        except Exception as e:
-            st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Ensure server is running. Error: {str(e)}")
+except json.JSONDecodeError:
+    st.error(f"Backend returned non-JSON response ({response.status_code}): {response.text}")
+except Exception as e:
+    st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Error: {str(e)}")

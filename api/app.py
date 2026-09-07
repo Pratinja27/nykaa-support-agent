@@ -13,6 +13,7 @@ app = FastAPI(
     title="Nykaa Support Agent API",
     description="REST API for RAG, Order Tracking, and Agent Checkpointing.",
     version="1.0.0",
+    redirect_slashes=False
 )
 
 # Enable CORS for Frontend Communication
