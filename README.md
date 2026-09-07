@@ -4,10 +4,11 @@ An E-Commerce customer support assistant designed for policy retrieval, order tr
 
 ---
 
-# Nykaa AI Support Agent (E-Commerce & Retail Track)
+# 🛍️ Nykaa Support AI Agent
 
-> **Track:** Nykaa (E-commerce & Retail)  
-> **Mode:** Deterministic `MOCK_LLM` (Zero API keys required)
+[![Live Demo](https://img.shields.io/badge/Render-Live%20Demo-brightgreen?style=for-the-badge&logo=render)](https://nykaa-support-agent-1.onrender.com)
+
+> 🚀 **Live Application:** [https://nykaa-support-agent-1.onrender.com](https://YOUR-ACTUAL-RENDER-URL.onrender.com)
 
 ---
 
