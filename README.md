@@ -256,8 +256,9 @@ The **Nykaa E-Commerce & Retail Support AI Agent** capstone implementation is co
 
 ---
 
-## Directory Structure
+##  Directory Structure
 
+```text
 nykaa-support-agent/
 ├── agent/                  # Graph definition, nodes, schemas, and guardrails
 │   ├── checkpoint.py       # SQLite persistence setup
@@ -267,7 +268,7 @@ nykaa-support-agent/
 │   └── schema.py           # Pydantic graph state schemas
 ├── api/                    # FastAPI service layer
 │   └── app.py              # Controller endpoints (/chat, /order/{id}, /health)
-├── chroma_data/            # Vector database storage
+├── chroma_data/            # Persistent vector database storage
 ├── data/                   # Mock storage and runtime persistence
 │   ├── checkpoints.db      # SQLite checkpoint database
 │   └── orders.json         # Mock order database
@@ -276,11 +277,12 @@ nykaa-support-agent/
 ├── rag/                    # Embeddings and document retriever modules
 ├── tools/                  # Tool abstractions and external handlers
 │   └── order_tool.py       # Order tracking implementation
-├── ui.py                   # Streamlit client web app
-├── requirements.txt        # Dependencies
-└── README.md
-
----
+├── UI.py                   # Streamlit client web app
+├── Dockerfile              # Container deployment file
+├── requirements.txt        # Python dependencies
+├── start.sh                # Dual-process startup script
+└── README.md               # Project documentation
+```
 
 ## Getting Started
 
