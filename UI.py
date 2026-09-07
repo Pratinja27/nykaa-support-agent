@@ -7,18 +7,23 @@ import requests
 
 from agent.guardrails import mask_pii, detect_injection
 
-st.set_page_config(page_title="Nykaa Support Agent", page_icon="🛍️", layout="wide")
+# Page config (uses your logo for browser tab icon if logo.png exists)
+PAGE_ICON = "logo.png" if os.path.exists("logo.png") else "🛍️"
+st.set_page_config(page_title="Nykaa Support Agent", page_icon=PAGE_ICON, layout="wide")
 
 # ---------------------------------------------------------------------------
-# LOGO DISPLAY LOGIC
+# CUSTOM LOGO + TITLE HEADER
 # ---------------------------------------------------------------------------
-# If logo.png exists in your root folder, display it; otherwise, use emoji title
-if os.path.exists("logo.png"):
-    st.image("logo.png", width=180)
+col1, col2 = st.columns([0.08, 0.92], vertical_alignment="center")
+
+with col1:
+    if os.path.exists("logo.png"):
+        st.image("logo.png", width=60)
+    else:
+        st.write("🛍️")
+
+with col2:
     st.title("Nykaa Support AI Agent")
-else:
-    st.title("🛍️ Nykaa Support AI Agent")
-
 # Backend API Configuration
 raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 BACKEND_URL = raw_url.strip().rstrip("/")
