@@ -7,7 +7,7 @@ import requests
 
 from agent.guardrails import mask_pii, detect_injection
 
-# Page config (uses your logo for browser tab icon if logo.png exists)
+# Page config (uses logo for browser tab icon if logo.png exists)
 PAGE_ICON = "logo.png" if os.path.exists("logo.png") else "🛍️"
 st.set_page_config(page_title="Nykaa Support Agent", page_icon=PAGE_ICON, layout="wide")
 
@@ -24,8 +24,9 @@ with col1:
 
 with col2:
     st.title("Nykaa Support AI Agent")
+
 # Backend API Configuration
-raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+raw_url = os.getenv("BACKEND_URL", "https://nykaa-support-agent-1.onrender.com")
 BACKEND_URL = raw_url.strip().rstrip("/")
 
 if "messages" not in st.session_state:
