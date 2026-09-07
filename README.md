@@ -165,7 +165,6 @@ The order retrieval tool (`tools/order_tool.py`) queries order records directly 
 ### Escalation Scoring Formula
 
 $$\text{Escalation Score} = 0.6 \times \text{delayed\_signal} + 0.4 \times \left(\frac{\text{days\_since\_created}}{30}\right)$$
-
 - **Escalation Threshold:** `0.75`
 
 ### Sample Output Demonstrations
