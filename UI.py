@@ -7,26 +7,21 @@ import requests
 
 from agent.guardrails import mask_pii, detect_injection
 
-# Page config (uses logo for browser tab icon if logo.png exists)
 PAGE_ICON = "logo.png" if os.path.exists("logo.png") else "🛍️"
 st.set_page_config(page_title="Nykaa Support Agent", page_icon=PAGE_ICON, layout="wide")
 
-# ---------------------------------------------------------------------------
-# CUSTOM LOGO + TITLE HEADER
-# ---------------------------------------------------------------------------
+# Header
 col1, col2 = st.columns([0.08, 0.92], vertical_alignment="center")
-
 with col1:
     if os.path.exists("logo.png"):
         st.image("logo.png", width=60)
     else:
         st.write("🛍️")
-
 with col2:
     st.title("Nykaa Support AI Agent")
 
-# Backend API Configuration
-raw_url = os.getenv("BACKEND_URL", "https://nykaa-support-agent-1.onrender.com")
+# Points directly to FastAPI inside the container by default
+raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 BACKEND_URL = raw_url.strip().rstrip("/")
 
 if "messages" not in st.session_state:
@@ -42,9 +37,6 @@ def log_request(log_data: dict):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(log_data) + "\n")
 
-# ---------------------------------------------------------------------------
-# SMALL-TALK MATCHERS
-# ---------------------------------------------------------------------------
 GREETINGS = ["hi", "hello", "hey", "good morning", "good evening", "hi there"]
 THANK_YOU_PHRASES = [
     "thank you", "thanks", "thank u", "thanks a lot", 
@@ -86,28 +78,24 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
 
     clean_prompt = prompt.strip().lower()
 
-    # 1. Immediate response for Thank You / Acknowledgments
     if any(phrase == clean_prompt or clean_prompt.startswith(phrase) for phrase in THANK_YOU_PHRASES):
         reply = "You're very welcome! 😊 Let me know if you need help with anything else on Nykaa!"
         st.session_state.messages.append({"role": "assistant", "content": reply})
         with st.chat_message("assistant"):
             st.markdown(reply)
 
-    # 2. Immediate response for Greetings
     elif clean_prompt in GREETINGS:
         reply = "Hello! 👋 Welcome to Nykaa Support. How can I assist you with your orders or products today?"
         st.session_state.messages.append({"role": "assistant", "content": reply})
         with st.chat_message("assistant"):
             st.markdown(reply)
 
-    # 3. Security Guardrail Check
     elif detect_injection(prompt):
         err_msg = "🚨 **Security Policy Violation**: Prompt injection attempt detected."
         st.session_state.messages.append({"role": "assistant", "content": err_msg})
         with st.chat_message("assistant"):
             st.error(err_msg)
 
-    # 4. Standard Queries sent to Backend API
     else:
         start_time = time.time()
         trace_id = str(uuid.uuid4())
@@ -117,36 +105,32 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
             "query": masked_query
         }
 
-        # In UI.py around line 120:
-try:
-    endpoint_url = f"{BACKEND_URL}/chat"
-    response = requests.post(endpoint_url, json=payload, timeout=30)
-    duration = round(time.time() - start_time, 4)
+        try:
+            response = requests.post(f"{BACKEND_URL}/chat", json=payload, timeout=30)
+            duration = round(time.time() - start_time, 4)
 
-    if response.status_code == 200:
-        data = response.json()
-        route = data.get("route", "unknown")
-        final_res = data.get("final_response", "No response generated.")
+            if response.status_code == 200:
+                data = response.json()
+                route = data.get("route", "unknown")
+                final_res = data.get("final_response", "No response generated.")
 
-        log_entry = {
-            "trace_id": trace_id,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "duration_sec": duration,
-            "thread_id": st.session_state.thread_id,
-            "query_masked": masked_query,
-            "route": route,
-            "final_response": final_res
-        }
-        log_request(log_entry)
+                log_entry = {
+                    "trace_id": trace_id,
+                    "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                    "duration_sec": duration,
+                    "thread_id": st.session_state.thread_id,
+                    "query_masked": masked_query,
+                    "route": route,
+                    "final_response": final_res
+                }
+                log_request(log_entry)
 
-        reply_content = f"{final_res}\n\n*`[Route: {route}]`*"
-        st.session_state.messages.append({"role": "assistant", "content": reply_content})
-        with st.chat_message("assistant"):
-            st.markdown(reply_content)
-    else:
-        st.error(f"Backend API Error ({response.status_code}): {response.text}")
+                reply_content = f"{final_res}\n\n*`[Route: {route}]`*"
+                st.session_state.messages.append({"role": "assistant", "content": reply_content})
+                with st.chat_message("assistant"):
+                    st.markdown(reply_content)
+            else:
+                st.error(f"Backend API Error ({response.status_code}) at target `{BACKEND_URL}/chat`: {response.text}")
 
-except json.JSONDecodeError:
-    st.error(f"Backend returned non-JSON response ({response.status_code}): {response.text}")
-except Exception as e:
-    st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Error: {str(e)}")
+        except Exception as e:
+            st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Ensure server is running. Error: {str(e)}")
