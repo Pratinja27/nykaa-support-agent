@@ -38,3 +38,9 @@ evaluation/output/
 # OS files
 .DS_Store
 Thumbs.db
+
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+memory.json
