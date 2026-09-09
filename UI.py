@@ -20,8 +20,7 @@ with col1:
 with col2:
     st.title("Nykaa Support AI Agent")
 
-raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
-BACKEND_URL = raw_url.strip().rstrip("/")
+BACKEND_URL = "http://127.0.0.1:8000"
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
