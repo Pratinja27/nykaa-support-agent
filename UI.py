@@ -20,10 +20,8 @@ with col1:
 with col2:
     st.title("Nykaa Support AI Agent")
 
-# Points directly to FastAPI inside the container by default
-raw_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+raw_url = os.getenv("BACKEND_URL", "https://nykaa-support-agent-1.onrender.com")
 BACKEND_URL = raw_url.strip().rstrip("/")
-
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
