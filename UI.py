@@ -4,6 +4,7 @@ import json
 import uuid
 import time
 import requests
+import subprocess
 
 from agent.guardrails import mask_pii, detect_injection
 
@@ -52,9 +53,18 @@ with st.sidebar:
     if st.button("Add Document"):
         kb_path = os.path.join("data", "knowledge_base", os.path.basename(doc_filename))
         os.makedirs(os.path.dirname(kb_path), exist_ok=True)
+        
+        # 1. Save file to disk
         with open(kb_path, "w", encoding="utf-8") as f:
             f.write(doc_content)
-        st.success(f"Added `{doc_filename}` successfully!")
+        
+        # 2. Trigger runtime vector re-indexing for ChromaDB
+        try:
+            with st.spinner("Re-indexing vector database..."):
+                subprocess.run(["python", "-m", "rag.index"], check=True)
+            st.success(f"Added and indexed `{doc_filename}` successfully!")
+        except Exception as e:
+            st.error(f"Saved file, but vector re-indexing failed: {e}")
 
     st.markdown("---")
     st.header("📜 Live Log Stream")
