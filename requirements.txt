@@ -13,3 +13,6 @@ transformers
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
 streamlit
+langchain-text-splitters
+langchain_openai
+langchain_community.vectorstores

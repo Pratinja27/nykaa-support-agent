@@ -220,5 +220,323 @@
       "role": "assistant",
       "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nmay arrange a replacement, return, or refund when the claim meets the applicable conditions.\n\nDocument ID: KB004\nTopic: Reverse-Pickup Eligibility\n\nReverse pickup is available for eligible return requests in supported service areas. The item must satisfy the applicable return policy and pass t"
     }
+  ],
+  "thread_b47106": [
+    {
+      "role": "user",
+      "content": "how can i cancel my order?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB005\nTopic: Order Cancellation\n\nCustomers can cancel any order free of charge as long as the status is 'Placed' or 'Processing'. Once an order status changes to 'Shipped', direct cancell\n\norder status changes to 'Shipped', direct cancellation is no longer available.\n\nDocument ID: KB006\nTopic: Order Cancellation Policy\n\nCustomers can request cancellation while an order is still in the Placed stage. Once an order has entered shipment processing, cancellation may no"
+    }
+  ],
+  "demo_session_1": [
+    {
+      "role": "user",
+      "content": "Hi, I want to check my order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "What is the current status?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "What is the return policy for cosmetics?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w"
+    }
+  ],
+  "thread_14b284": [
+    {
+      "role": "user",
+      "content": "status of order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    }
+  ],
+  "thread_b5fc05": [
+    {
+      "role": "user",
+      "content": "status of ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "What is the return policy for cosmetics?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB009\nTopic: Size Exchange Policy\n\nEligible Apparel and Footwear products can be requested for a different available size within 7 days of delivery. The product must be unused, undamaged,\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w"
+    },
+    {
+      "role": "user",
+      "content": "What was my order ID again?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nrt. The claim should include the order ID and clear photographs showing the damage and the item's packaging. The support team reviews the evidence and may arrange a replacement, return, or refund when\n\nrt. The claim should include the order ID and clear photographs showing the damage and the item's packaging. The support team reviews the evidence and may arrange a replacement, return, or refund when\n\nDocument ID: KB010\nTopic: Damaged Item Claim Process\n\nCustomers should report a damaged item as soon as possible after delivery through customer support. The claim should include the order ID and clea"
+    }
+  ],
+  "thread_4703b3": [
+    {
+      "role": "user",
+      "content": "status of ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "what is my order id again?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "what type of order it is?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "how should i cancel my order"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    },
+    {
+      "role": "user",
+      "content": "no how to cancel the order"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 status: Placed. Total: ₹9311. Escalation Score: 0.093 (Escalation Urgency: Normal)."
+    }
+  ],
+  "thread_8d19cb": [
+    {
+      "role": "user",
+      "content": "status of ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "what is my order ID?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "return policy?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nNykaa return policy allows returns within 15 days.\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w"
+    },
+    {
+      "role": "user",
+      "content": "how to cancel order?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB005\nTopic: Order Cancellation\n\nCustomers can cancel any order free of charge as long as the status is 'Placed' or 'Processing'. Once an order status changes to 'Shipped', direct cancell\n\norder status changes to 'Shipped', direct cancellation is no longer available.\n\nDocument ID: KB006\nTopic: Order Cancellation Policy\n\nCustomers can request cancellation while an order is still in the Placed stage. Once an order has entered shipment processing, cancellation may no"
+    },
+    {
+      "role": "user",
+      "content": "what is return policy for festival sale?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nronics items. Home products have a 10-day return window, while Beauty products have a 5-day return window. Items must be unused, in resalable condition, and accompanied by the original packaging where"
+    },
+    {
+      "role": "user",
+      "content": "what is return policy for festive sale?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nDocument ID: KB001\nTopic: Return Window by Product Category\n\nCustomers can request a return within 7 days of delivery for Apparel, Footwear, and Electronics items. Home products have a 10-day return w\n\nNykaa return policy allows returns within 15 days."
+    },
+    {
+      "role": "user",
+      "content": "Orders placed during the Festive Sale?"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    }
+  ],
+  "thread_b599eb": [
+    {
+      "role": "user",
+      "content": "What is the cancellation policy for festive sale orders?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB006\nTopic: Order Cancellation Policy\n\nCustomers can request cancellation while an order is still in the Placed stage. Once an order has entered shipment processing, cancellation may no\n\nDocument ID: KB006\nTopic: Order Cancellation Policy\n\nCustomers can request cancellation while an order is still in the Placed stage. Once an order has entered shipment processing, cancellation may no\n\nDocument ID: KB005\nTopic: Order Cancellation\n\nCustomers can cancel any order free of charge as long as the status is 'Placed' or 'Processing'. Once an order status changes to 'Shipped', direct cancell"
+    }
+  ],
+  "thread_706e66": [
+    {
+      "role": "user",
+      "content": "Can I return a festive beauty bundle?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nd. \n\nFestive beauty bundles, limited-edition gift sets, and flash sale items are marked non-returnable unless received in a damaged or defective state. Any damage or discrepancy must be reported withi\n\ns of placement, provided the status is still 'Placed'. Once an order transitions to 'Processing' or 'Shipped', cancellations are strictly not permitted. \n\nFestive beauty bundles, limited-edition gift\n\nt. Once packed or dispatched, sale orders cannot be canceled. Festive combo kits and limited-edition beauty bundles are non-returnable unless reported damaged within 24 hours of delivery. Standard del"
+    }
+  ],
+  "thread_1677b8": [
+    {
+      "role": "user",
+      "content": "Can I return a festive beauty bundle?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nd. \n\nFestive beauty bundles, limited-edition gift sets, and flash sale items are marked non-returnable unless received in a damaged or defective state. Any damage or discrepancy must be reported withi\n\ns of placement, provided the status is still 'Placed'. Once an order transitions to 'Processing' or 'Shipped', cancellations are strictly not permitted. \n\nFestive beauty bundles, limited-edition gift\n\nt. Once packed or dispatched, sale orders cannot be canceled. Festive combo kits and limited-edition beauty bundles are non-returnable unless reported damaged within 24 hours of delivery. Standard del"
+    },
+    {
+      "role": "user",
+      "content": "status of order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "what is my order"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    },
+    {
+      "role": "user",
+      "content": "what was it"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    },
+    {
+      "role": "user",
+      "content": "ORD1002"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1002 is currently Delivered. Order value: ₹18169. Escalation score: 0.027 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "what was my order"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    }
+  ],
+  "thread_1d9fd0": [
+    {
+      "role": "user",
+      "content": "Orders placed during the Festive Sale can i cancel it?"
+    },
+    {
+      "role": "assistant",
+      "content": "Based on the knowledge base:\n\nDocument ID: KB011\nTopic: Festive Sale Cancellation and Returns\n\nOrders placed during the Festive Sale can only be canceled within 2 hours of placement. Once packed or dispatched, sale orders cannot b\n\nDocument ID: KB011\nTopic: Festive Sale Cancellation and Returns Policy\n\nOrders placed during the Festive Sale event can only be canceled within 2 hours of placement, provided the status is still 'Plac\n\nDocument ID: KB011\nTopic: Festive Sale Cancellation and Returns Policy\n\nOrders placed during the Festive Sale event can only be canceled within 2 hours of placement, provided the status is still 'Plac"
+    },
+    {
+      "role": "user",
+      "content": "status of order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "what was my order number?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "when its going to come by?"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    },
+    {
+      "role": "user",
+      "content": "status of my order"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    }
+  ],
+  "thread_c26ce2": [
+    {
+      "role": "user",
+      "content": "status of order ORD1001"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "when its going to come?"
+    },
+    {
+      "role": "assistant",
+      "content": "Order ORD1001 is currently Placed. Order value: ₹9311. Escalation score: 0.093 (escalation recommended: False)."
+    },
+    {
+      "role": "user",
+      "content": "what is?"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    },
+    {
+      "role": "user",
+      "content": "thank yu"
+    },
+    {
+      "role": "assistant",
+      "content": "I don't know based on the available knowledge base."
+    }
   ]
 }

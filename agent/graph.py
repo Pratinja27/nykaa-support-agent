@@ -38,6 +38,12 @@ ORDER_INTENT_PATTERNS = [
     r"\bstatus\s+of\s+ord\d+\b",
 ]
 
+# Policy/How-to keywords that should route to RAG instead of DB lookup
+POLICY_KEYWORDS = [
+    r"\bcancel", r"\breturn", r"\brefund", r"\bpolicy", 
+    r"\bexchange", r"\breplace", r"\bhow\s+to\b", r"\bhow\s+should\b"
+]
+
 
 def _has_order_id(query: str) -> bool:
     return bool(ORDER_ID_PATTERN.search(query))
@@ -46,6 +52,11 @@ def _has_order_id(query: str) -> bool:
 def _has_order_intent(query: str) -> bool:
     lowered = query.lower()
     return any(re.search(pattern, lowered) for pattern in ORDER_INTENT_PATTERNS)
+
+
+def _has_policy_intent(query: str) -> bool:
+    lowered = query.lower()
+    return any(re.search(pattern, lowered) for pattern in POLICY_KEYWORDS)
 
 
 def _extract_order_id(query: str) -> Optional[str]:
@@ -73,28 +84,34 @@ def input_node(state: GraphState) -> GraphState:
     return {"query": query, "history": history}
 
 
+# Expanded regex pattern for implicit pronouns and delivery follow-ups
+IMPLICIT_CONTEXT_PATTERN = re.compile(
+    r"\b(it|this|that|status|id|again|order|what was|item|details|when|come|arrive|delivery|expected)\b", 
+    re.IGNORECASE
+)
+
 def router_node(state: GraphState) -> GraphState:
     query = state["query"]
+    history = state.get("history", [])
+    previous_order_id = _extract_order_id_from_history(history)
 
-    # Explicit order ID → always order route
+    # 1. Policy or workflow questions take top priority -> RAG
+    if _has_policy_intent(query):
+        return {"route": "rag"}
+
+    # 2. Explicit order ID in query -> always order route
     if _has_order_id(query):
         return {"route": "order"}
 
-    # Explicit order-related intent → order route
+    # 3. Explicit order-related intent -> order route
     if _has_order_intent(query):
         return {"route": "order"}
 
-    # Context-dependent status question:
-    # If the user says "What is the status?" and an order
-    # was previously mentioned in this conversation, route to order.
-    if re.search(r"\bstatus\b", query.lower()):
-        history = state.get("history", [])
-        previous_order_id = _extract_order_id_from_history(history)
+    # 4. Implicit/pronoun follow-ups ("it", "this", "when is it coming?") when memory has an order ID
+    if previous_order_id and IMPLICIT_CONTEXT_PATTERN.search(query):
+        return {"route": "order"}
 
-        if previous_order_id:
-            return {"route": "order"}
-
-    # Everything else → RAG
+    # 5. Fallback to RAG
     return {"route": "rag"}
 
 
@@ -196,6 +213,7 @@ def build_graph(checkpointer=None, interrupt_before=None):
         checkpointer=checkpointer,
         interrupt_before=interrupt_before or []
     )
+
 # ---------------------------------------------------------------------------
 # TASK 8 DEMONSTRATION
 # ---------------------------------------------------------------------------

@@ -1,139 +1,144 @@
 from pathlib import Path
-
 import chromadb
 from sentence_transformers import SentenceTransformer
 
 from rag.chunking import fixed_size_chunks, sentence_chunks
 
+# Paths and model config
+BASE_KB_DIR = Path("data/knowledge_base")
+PERSIST_DB_DIR = "chroma_data"
+MODEL_NAME = "all-MiniLM-L6-v2"
 
-KB_PATH = Path("data/knowledge_base")
-CHROMA_PATH = "chroma_data"
 
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+def fetch_kb_files():
+    """Reads all markdown and text files from the KB directory."""
+    raw_docs = []
+    
+    # Grab both markdown and standard text files
+    kb_paths = sorted(list(BASE_KB_DIR.glob("*.md")) + list(BASE_KB_DIR.glob("*.txt")))
 
+    for file_path in kb_paths:
+        content = file_path.read_text(encoding="utf-8").strip()
+        if not content:
+            continue
 
-def load_documents():
-    documents = []
+        # Extract Document ID header if present, otherwise default to filename stem
+        lines = content.splitlines()
+        first_line = lines[0] if lines else ""
+        
+        file_tag = file_path.stem.upper()
+        if "Document ID:" in first_line:
+            parsed_id = first_line.split("Document ID:")[1].strip()
+            doc_identifier = f"{parsed_id}_{file_tag}"
+        else:
+            doc_identifier = file_tag
 
-    for file_path in sorted(KB_PATH.glob("*.md")):
-        text = file_path.read_text(encoding="utf-8")
-
-        document_id = text.splitlines()[0].replace(
-            "Document ID: ", ""
-        )
-
-        documents.append({
-            "document_id": document_id,
-            "filename": file_path.name,
-            "text": text
+        raw_docs.append({
+            "doc_id": doc_identifier,
+            "file_name": file_path.name,
+            "content": content
         })
 
-    return documents
+    return raw_docs
 
 
-def build_chunks(documents):
-    fixed_chunks = []
-    sentence_based_chunks = []
+def generate_all_chunks(docs):
+    """Splits documents into fixed-size and sentence-based chunk dictionaries."""
+    fixed_list = []
+    sentence_list = []
 
-    for document in documents:
-
-        fixed = fixed_size_chunks(document["text"])
-
-        for index, chunk in enumerate(fixed):
-            fixed_chunks.append({
-                "id": f"{document['document_id']}_fixed_{index}",
-                "text": chunk,
-                "document_id": document["document_id"],
-                "filename": document["filename"],
-                "chunk_index": index
+    for doc in docs:
+        # Strategy 1: Fixed-size overlap chunking
+        f_chunks = fixed_size_chunks(doc["content"])
+        for idx, text_block in enumerate(f_chunks):
+            fixed_list.append({
+                "chunk_id": f"{doc['doc_id']}_fixed_{idx}",
+                "text": text_block,
+                "doc_id": doc["doc_id"],
+                "file_name": doc["file_name"],
+                "pos": idx
             })
 
-        sentence = sentence_chunks(document["text"])
-
-        for index, chunk in enumerate(sentence):
-            sentence_based_chunks.append({
-                "id": f"{document['document_id']}_sentence_{index}",
-                "text": chunk,
-                "document_id": document["document_id"],
-                "filename": document["filename"],
-                "chunk_index": index
+        # Strategy 2: Sentence-level chunking
+        s_chunks = sentence_chunks(doc["content"])
+        for idx, text_block in enumerate(s_chunks):
+            sentence_list.append({
+                "chunk_id": f"{doc['doc_id']}_sent_{idx}",
+                "text": text_block,
+                "doc_id": doc["doc_id"],
+                "file_name": doc["file_name"],
+                "pos": idx
             })
 
-    return fixed_chunks, sentence_based_chunks
+    return fixed_list, sentence_list
 
 
-def create_collection(client, name, chunks, model):
-    collection = client.get_or_create_collection(
-        name=name,
+def sync_to_chroma(db_client, collection_name, chunk_data, encoder):
+    """Upserts chunk payloads and embeddings into a targeted ChromaDB collection."""
+    col = db_client.get_or_create_collection(
+        name=collection_name,
         metadata={"hnsw:space": "cosine"}
     )
 
-    ids = [chunk["id"] for chunk in chunks]
-    texts = [chunk["text"] for chunk in chunks]
+    ids = [item["chunk_id"] for item in chunk_data]
+    texts = [item["text"] for item in chunk_data]
+    
+    # Generate vector embeddings
+    vectors = encoder.encode(texts, normalize_embeddings=True).tolist()
 
-    embeddings = model.encode(
-        texts,
-        normalize_embeddings=True
-    ).tolist()
-
-    metadatas = [
+    metadata_payload = [
         {
-            "document_id": chunk["document_id"],
-            "filename": chunk["filename"],
-            "chunk_index": chunk["chunk_index"]
+            "document_id": item["doc_id"],
+            "filename": item["file_name"],
+            "chunk_index": item["pos"]
         }
-        for chunk in chunks
+        for item in chunk_data
     ]
 
-    collection.upsert(
+    col.upsert(
         ids=ids,
         documents=texts,
-        embeddings=embeddings,
-        metadatas=metadatas
+        embeddings=vectors,
+        metadatas=metadata_payload
     )
 
-    return collection
+    return col
 
 
-def build_indexes():
-    documents = load_documents()
+def main():
+    documents = fetch_kb_files()
+    if not documents:
+        print("Warning: Knowledge base directory is empty. Nothing to index.")
+        return
 
-    fixed_chunks, sentence_chunks_data = build_chunks(documents)
+    fixed_chunks, sentence_chunks_data = generate_all_chunks(documents)
+    
+    print(f"Loading transformer model: {MODEL_NAME}...")
+    embedder = SentenceTransformer(MODEL_NAME)
+    
+    db_client = chromadb.PersistentClient(path=PERSIST_DB_DIR)
 
-    model = SentenceTransformer(EMBEDDING_MODEL)
-
-    client = chromadb.PersistentClient(
-        path=CHROMA_PATH
+    # Sync Strategy 1 (Fixed)
+    col_fixed = sync_to_chroma(
+        db_client, 
+        "nykaa_fixed_chunks", 
+        fixed_chunks, 
+        embedder
     )
 
-    fixed_collection = create_collection(
-        client,
-        "nykaa_fixed_chunks",
-        fixed_chunks,
-        model
+    # Sync Strategy 2 (Sentence)
+    col_sent = sync_to_chroma(
+        db_client, 
+        "nykaa_sentence_chunks", 
+        sentence_chunks_data, 
+        embedder
     )
 
-    sentence_collection = create_collection(
-        client,
-        "nykaa_sentence_chunks",
-        sentence_chunks_data,
-        model
-    )
-
-    print(f"Documents loaded: {len(documents)}")
-    print(f"Fixed-size chunks: {len(fixed_chunks)}")
-    print(f"Sentence chunks: {len(sentence_chunks_data)}")
-
-    print(
-        f"Fixed collection count: "
-        f"{fixed_collection.count()}"
-    )
-
-    print(
-        f"Sentence collection count: "
-        f"{sentence_collection.count()}"
-    )
+    print("\n--- Vector Store Summary ---")
+    print(f"Raw documents parsed: {len(documents)}")
+    print(f"Fixed-size collection count: {col_fixed.count()}")
+    print(f"Sentence-based collection count: {col_sent.count()}")
 
 
 if __name__ == "__main__":
-    build_indexes()
+    main()

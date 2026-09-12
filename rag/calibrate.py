@@ -1,112 +1,76 @@
 import chromadb
 from sentence_transformers import SentenceTransformer
 
+VECTOR_DB_DIR = "chroma_data"
+MODEL_NAME = "all-MiniLM-L6-v2"
 
-CHROMA_PATH = "chroma_data"
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-
-IN_SCOPE_QUERIES = [
+# Task 4 mandates >= 5 in-scope queries and >= 2 out-of-scope queries
+IN_SCOPE_PROMPTS = [
     "What is the return window for footwear?",
     "How long does a COD refund take?",
     "Can I exchange my shoes for another size?",
     "How long does standard delivery take?",
+    "What is the warranty period for beauty appliances?"
 ]
 
-OUT_OF_SCOPE_QUERIES = [
+OUT_OF_SCOPE_PROMPTS = [
     "What is the capital of France?",
-    "Write a Python program to sort a list.",
+    "Write a Python program to sort a list."
 ]
 
 
-def get_top_similarity(collection, model, query):
-    query_embedding = model.encode(
-        [query],
-        normalize_embeddings=True
-    ).tolist()
-
-    results = collection.query(
-        query_embeddings=query_embedding,
+def compute_top_similarity(collection, model, user_query):
+    query_vector = model.encode([user_query], normalize_embeddings=True).tolist()
+    
+    response = collection.query(
+        query_embeddings=query_vector,
         n_results=1
     )
 
-    distance = results["distances"][0][0]
-    similarity = 1 - distance
+    cosine_dist = response["distances"][0][0]
+    similarity_score = 1.0 - cosine_dist
+    doc_id = response["metadatas"][0][0]["document_id"]
 
-    return similarity, results["metadatas"][0][0]["document_id"]
+    return similarity_score, doc_id
 
 
-def main():
-    client = chromadb.PersistentClient(
-        path=CHROMA_PATH
-    )
+def run_calibration():
+    db_client = chromadb.PersistentClient(path=VECTOR_DB_DIR)
+    target_collection = db_client.get_collection("nykaa_sentence_chunks")
+    encoder = SentenceTransformer(MODEL_NAME)
 
-    collection = client.get_collection(
-        "nykaa_sentence_chunks"
-    )
+    in_scope_results = []
+    out_scope_results = []
 
-    model = SentenceTransformer(
-        EMBEDDING_MODEL
-    )
+    print("=== TASK 4: EMPIRICAL THRESHOLD CALIBRATION ===")
 
-    print("=" * 60)
-    print("TASK 4 - SIMILARITY CALIBRATION")
-    print("=" * 60)
+    print("\n--- Testing In-Scope Queries ---")
+    for q in IN_SCOPE_PROMPTS:
+        score, target_doc = compute_top_similarity(target_collection, encoder, q)
+        in_scope_results.append(score)
+        print(f"Query: '{q}'\n  -> Matched Doc: {target_doc} | Top-1 Score: {score:.4f}")
 
-    in_scope_scores = []
-    out_scope_scores = []
+    print("\n--- Testing Out-of-Scope Queries ---")
+    for q in OUT_OF_SCOPE_PROMPTS:
+        score, target_doc = compute_top_similarity(target_collection, encoder, q)
+        out_scope_results.append(score)
+        print(f"Query: '{q}'\n  -> Matched Doc: {target_doc} | Top-1 Score: {score:.4f}")
 
-    print("\nIN-SCOPE QUERIES")
+    # Calculate cluster boundaries
+    lowest_in_scope = min(in_scope_results)
+    highest_out_of_scope = max(out_scope_results)
+    
+    # Selected threshold positioned in the gap between the two clusters
+    calibrated_threshold = round((lowest_in_scope + highest_out_of_scope) / 2, 2)
 
-    for query in IN_SCOPE_QUERIES:
-        similarity, document_id = get_top_similarity(
-            collection,
-            model,
-            query
-        )
-
-        in_scope_scores.append(similarity)
-
-        print(f"\nQuery: {query}")
-        print(f"Top document: {document_id}")
-        print(f"Top-1 similarity: {similarity:.4f}")
-
-    print("\nOUT-OF-SCOPE QUERIES")
-
-    for query in OUT_OF_SCOPE_QUERIES:
-        similarity, document_id = get_top_similarity(
-            collection,
-            model,
-            query
-        )
-
-        out_scope_scores.append(similarity)
-
-        print(f"\nQuery: {query}")
-        print(f"Top document: {document_id}")
-        print(f"Top-1 similarity: {similarity:.4f}")
-
-    print("\n" + "=" * 60)
-    print("SUMMARY")
-    print("=" * 60)
-
-    print("\nIn-scope scores:")
-    for score in in_scope_scores:
-        print(f"{score:.4f}")
-
-    print("\nOut-of-scope scores:")
-    for score in out_scope_scores:
-        print(f"{score:.4f}")
-
-    print(
-        f"\nLowest in-scope score: "
-        f"{min(in_scope_scores):.4f}"
-    )
-
-    print(
-        f"Highest out-of-scope score: "
-        f"{max(out_scope_scores):.4f}"
-    )
+    print("\n" + "=" * 45)
+    print("CALIBRATION SUMMARY & RECOMMENDED THRESHOLD")
+    print("=" * 45)
+    print(f"Lowest In-Scope Similarity:    {lowest_in_scope:.4f}")
+    print(f"Highest Out-of-Scope Similarity: {highest_out_of_scope:.4f}")
+    print(f"CALIBRATED THRESHOLD:          {calibrated_threshold}")
+    print("=" * 45)
 
 
 if __name__ == "__main__":
-    main()
+    run_calibration()

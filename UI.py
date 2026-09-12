@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import sys
 import json
 import uuid
 import time
@@ -21,7 +22,8 @@ with col1:
 with col2:
     st.title("Nykaa Support AI Agent")
 
-BACKEND_URL = "http://127.0.0.1:8000"
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
@@ -31,13 +33,15 @@ LOG_DIR = "logs"
 LOG_FILE = os.path.join(LOG_DIR, "requests.jsonl")
 os.makedirs(LOG_DIR, exist_ok=True)
 
+
 def log_request(log_data: dict):
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(log_data) + "\n")
 
+
 GREETINGS = ["hi", "hello", "hey", "good morning", "good evening", "hi there"]
 THANK_YOU_PHRASES = [
-    "thank you", "thanks", "thank u", "thanks a lot", 
+    "thank you", "thanks", "thank u", "thanks a lot",
     "thats alright", "that's alright", "okay thank you", "ok thanks"
 ]
 
@@ -47,24 +51,43 @@ with st.sidebar:
 
     st.markdown("---")
     st.header("📄 Add KB Document")
-    doc_filename = st.text_input("Filename", value="policies/returns.txt")
-    doc_content = st.text_area("Content", value="Nykaa return policy allows returns within 15 days.")
+
+    # Guidance note for evaluators
+    st.info("💡 **Format Tip:** Start line 1 with `Document ID: KBxxx` so RAG metadata tags correctly.")
+
+    with st.expander("📋 View Document Template"):
+        st.code(
+            "Document ID: KB005\nTopic: Cancellation Policy\n\nCustomers can cancel orders in 'Placed' status immediately.",
+            language="text"
+        )
+
+    doc_filename = st.text_input("Filename", value="cancellation_policy.txt")
+    doc_content = st.text_area(
+        "Content",
+        value="Document ID: KB005\nTopic: Order Cancellation\n\nCustomers can cancel any order free of charge as long as the status is 'Placed' or 'Processing'. Once an order status changes to 'Shipped', direct cancellation is no longer available.",
+        height=150
+    )
 
     if st.button("Add Document"):
         kb_path = os.path.join("data", "knowledge_base", os.path.basename(doc_filename))
         os.makedirs(os.path.dirname(kb_path), exist_ok=True)
-        
+
         # 1. Save file to disk
         with open(kb_path, "w", encoding="utf-8") as f:
             f.write(doc_content)
-        
-        # 2. Trigger runtime vector re-indexing for ChromaDB
+
+        # 2. Trigger runtime vector re-indexing for ChromaDB using current environment
         try:
             with st.spinner("Re-indexing vector database..."):
-                subprocess.run(["python", "-m", "rag.index"], check=True)
-            st.success(f"Added and indexed `{doc_filename}` successfully!")
-        except Exception as e:
-            st.error(f"Saved file, but vector re-indexing failed: {e}")
+                result = subprocess.run(
+                    [sys.executable, "-m", "rag.index"],
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+            st.success(f"Added and indexed `{os.path.basename(doc_filename)}` successfully!")
+        except subprocess.CalledProcessError as e:
+            st.error(f"Saved file, but vector re-indexing failed:\n\n```\n{e.stderr}\n```")
 
     st.markdown("---")
     st.header("📜 Live Log Stream")
@@ -113,7 +136,7 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
         }
 
         try:
-            response = requests.post(f"{BACKEND_URL}/chat", json=payload, timeout=30)
+            response = requests.post(f"{BACKEND_URL}/ask", json=payload, timeout=30)
             duration = round(time.time() - start_time, 4)
 
             if response.status_code == 200:
@@ -137,7 +160,7 @@ if prompt := st.chat_input("Ask a question (e.g. 'Status of ORD1001' or phone '9
                 with st.chat_message("assistant"):
                     st.markdown(reply_content)
             else:
-                st.error(f"Backend API Error ({response.status_code}) at target `{BACKEND_URL}/chat`: {response.text}")
+                st.error(f"Backend API Error ({response.status_code}) at target `{BACKEND_URL}/ask`: {response.text}")
 
         except Exception as e:
             st.error(f"Failed to connect to FastAPI backend at `{BACKEND_URL}`. Ensure server is running. Error: {str(e)}")

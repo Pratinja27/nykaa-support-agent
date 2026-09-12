@@ -1,9 +1,7 @@
 import os
 import sqlite3
 from langgraph.checkpoint.sqlite import SqliteSaver
-from agent.graph import build_graph
 
-# Ensure data directory exists
 DB_DIR = "data"
 DB_PATH = os.path.join(DB_DIR, "checkpoints.db")
 os.makedirs(DB_DIR, exist_ok=True)
@@ -17,8 +15,10 @@ def get_sqlite_checkpointer():
 
 def test_checkpointing():
     """Demonstrates state persistence and thread isolation across two threads."""
+    from agent.graph import construct_agent_graph
+
     checkpointer = get_sqlite_checkpointer()
-    graph_app = build_graph(checkpointer=checkpointer)
+    graph_app = construct_agent_graph(checkpointer=checkpointer)
 
     # Thread 1 Interaction
     config_thread_1 = {"configurable": {"thread_id": "user_session_101"}}
@@ -29,7 +29,6 @@ def test_checkpointing():
     print("Thread 1 Route:", res1.get("route"))
     print("Thread 1 Response:", res1.get("final_response"))
 
-    # Thread 2 Interaction (Isolated Session)
     config_thread_2 = {"configurable": {"thread_id": "user_session_202"}}
     input_2 = {"thread_id": "user_session_202", "query": "My order is ORD1002, tell me status"}
     
@@ -38,7 +37,6 @@ def test_checkpointing():
     print("Thread 2 Route:", res2.get("route"))
     print("Thread 2 Response:", res2.get("final_response"))
 
-    # Verify Checkpoint Persistence in SQLite DB
     state_thread_1 = graph_app.get_state(config_thread_1)
     state_thread_2 = graph_app.get_state(config_thread_2)
 
